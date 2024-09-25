@@ -8,7 +8,7 @@ plt.rcParams["font.sans-serif"] = ["SimHei"]
 plt.rcParams["axes.unicode_minus"] = False
 
 # 利用 AKShare 获取股票的前复权数据，这里只获取前 6 列
-stock_qfq_df = ak.stock_zh_a_hist(symbol="000001", adjust="qfq").iloc[:, :6]
+stock_qfq_df = ak.stock_zh_a_hist(symbol="300604", adjust="qfq").iloc[:, :6]
 # 处理字段命名，以符合 Backtrader 的要求
 stock_qfq_df.columns = [
     'date',
@@ -59,12 +59,12 @@ class MyStrategy(bt.Strategy):
 
 if __name__ == "__main__":
     cerebro = bt.Cerebro()  # 初始化回测系统
-    start_date = datetime(2024, 1, 1)  # 回测开始时间
+    start_date = datetime(2020, 1, 1)  # 回测开始时间
     end_date = datetime.now()  # 回测结束时间
     data = bt.feeds.PandasData(dataname=stock_qfq_df, fromdate=start_date, todate=end_date)  # 加载数据
     cerebro.adddata(data)  # 将数据传入回测系统
     cerebro.addstrategy(MyStrategy)  # 将交易策略加载到回测系统中
-    start_cash = 1000000
+    start_cash = 100000
     cerebro.broker.setcash(start_cash)  # 设置初始资本为 100000
     cerebro.broker.setcommission(commission=0.002)  # 设置交易手续费为 0.2%
     cerebro.run()  # 运行回测系统
